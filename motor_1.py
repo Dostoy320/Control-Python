@@ -47,14 +47,19 @@ def setStep(w1, w2, w3, w4):
 
 delay = .003
 
-forsteps = raw_input("Forward rotation in steps:")
-backsteps = raw_input("Backward rotation in steps:")
-print "Confirm: %s steps forward. \n \t %s steps back." % (forsteps, backsteps)
-confirm = raw_input("y/n >>")
-if (confirm == "y"):
-	forward(int(forsteps))
-	backwards(int(backsteps))
-else:
-	pass	
+cont = "y"
+
+while (cont == "y"):
+	forsteps = raw_input("Forward rotation in steps: ")
+	backsteps = raw_input("Backward rotation in steps: ")
+	print "Confirm: %s steps forward. \n \t %s steps back." % (forsteps, backsteps)
+	confirm = raw_input("y/n >> ")
+	if (confirm == "y"):
+		print "\n processing request...\n"
+		forward(int(forsteps))
+		backwards(int(backsteps))
+	else:
+		pass	
+	cont = raw_input("New input? y/n: ")
 
 GPIO.cleanup()
