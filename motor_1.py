@@ -63,15 +63,16 @@ def savefile(position):
 	w.write(str(position))
 	w.close()
 
+def processing():
+	print "\n processing request...\n"
+
+
 
 #rotation speed (time between coil phase changes) smaller number faster.  max = .002
 delay = .003
 
-cont = "y"  #initial state to start while loop
 
-
-print "--------------------------------------" #divider for UI purposesposition = 0
-
+print "-----------------------------------------" #divider for UI purposesposition = 0
 
 
 try:
@@ -80,35 +81,46 @@ try:
 	r = int(f.read())
 	position = r
 
+	cont = "y"  #initial state to start while loop
+
 	while (cont == "y"):
-		forsteps = int(raw_input("Forward rotation in steps: "))
-		backsteps = int(raw_input("Backward rotation in steps: "))
+		try:
+			forsteps = int(raw_input("Forward rotation in steps: "))
+		except ValueError:
+			print "\n !!! Not Valid !!! \n Please type a natural number.\n"
+			forsteps = int(raw_input("Forward rotation in steps: "))
+		try:
+			backsteps = int(raw_input("Backward rotation in steps: "))
+		except ValueError:
+			print "\n !!! Not Valid !!! \n Please type a natural number.\n"
+			backsteps = int(raw_input("Backward rotation in steps: "))
 		print "Confirm: %s steps forward. \n \t %s steps back." % (forsteps, backsteps)
 		confirm = raw_input("y/n >> ")
 		if (confirm == "y"):
-			print "\n processing request...\n"
+			processing()
 			position = forward(forsteps, position)
 			position = backwards(backsteps, position)
-			print position
 		else:
 			pass
 
 		cont = raw_input("New input? y/n: ")
-		if (cont == "n"):
-			zero = raw_input("back to zero? y/n: ")
-			print position
-			if (zero == "y"):
-				if (position > 0):
-					backsteps = position
-					position = backwards(backsteps, position)
-					savefile(position)
-				else:
-					forsteps = -position
-					position = forward(forsteps, position)
-					savefile(position)
-			else:
-				savefile(position)
-		
+
+	zero = raw_input("back to zero? y/n: ")
+
+	if (zero == "y"):
+		if (position > 0):
+			backsteps = position
+			processing()
+			position = backwards(backsteps, position)
+			savefile(position)
+		else:
+			forsteps = -position
+			processing()
+			position = forward(forsteps, position)
+			savefile(position)
+	else:
+		savefile(position)
+	
 
 finally:
 # IMPORTANT!!
